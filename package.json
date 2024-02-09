@@ -1,12 +1,16 @@
 {
   "name": "@alanpog/blib",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Testing",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup"
+  },
+  "bin": {
+    "buildMap": "./dist/buildMap.js",
+    "bext": "./dist/bext.js"
   },
   "keywords": [],
   "author": "alanpog",

@@ -1,7 +1,6 @@
 import { Elysia } from "elysia";
 import { html } from "@elysiajs/html";
 import { staticPlugin } from "@elysiajs/static";
-import path from "path";
 import fs from "fs";
 import withLayout from "./withLayout";
 
