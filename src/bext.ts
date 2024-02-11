@@ -1,11 +1,15 @@
 #!/usr/bin/env bun
-import { spawn } from "child_process";
+import { spawn, ChildProcess } from "child_process";
 import path from "path";
+import { watch } from "fs";
 
 const args = process.argv.slice(2);
 const helpMessage = "I'm the bext script.";
 
-const runDev = async () => {
+// Initialize buildMapProcess with a type of ChildProcess | null
+let buildMapProcess: ChildProcess | null = null;
+
+const runBuildMap = () => {
   // Determine the path to the buildMap binary
   const buildMapPath = path.join(
     process.cwd(),
@@ -14,28 +18,47 @@ const runDev = async () => {
     "buildMap"
   );
 
-  // Execute buildMap before starting the dev server
+  // Kill the previous buildMap process if it's still running
+  if (buildMapProcess) {
+    buildMapProcess.kill();
+    buildMapProcess = null;
+  }
+
+  // Execute buildMap
   console.log("Running buildMap...");
-  const buildMapProcess = spawn(buildMapPath, [], { stdio: "inherit" });
+  buildMapProcess = spawn(buildMapPath, [], { stdio: "inherit" });
 
-  await new Promise((resolve, reject) => {
-    buildMapProcess.on("error", (err) => {
-      console.error(`Failed to start buildMap process: ${err.message}`);
-      reject(err);
-    });
-
-    buildMapProcess.on("exit", (code) => {
-      if (code === 0) {
-        console.log("buildMap completed successfully.");
-        resolve(code);
-      } else {
-        console.error(`buildMap exited with code ${code}`);
-        reject(new Error("buildMap failed"));
-      }
-    });
+  buildMapProcess.on("error", (err) => {
+    console.error(`Failed to start buildMap process: ${err.message}`);
   });
 
-  // After buildMap has successfully completed, start the Bun process
+  buildMapProcess.on("exit", (code) => {
+    if (code === 0) {
+      console.log("buildMap completed successfully.");
+    } else {
+      console.error(`buildMap exited with code ${code}`);
+    }
+  });
+};
+
+const watchPagesDirectory = () => {
+  const pagesDirectory = path.join(process.cwd(), "src", "pages");
+  console.log(`Watching for file changes in ${pagesDirectory}...`);
+
+  // Initial run
+  runBuildMap();
+
+  // Set up watch using Bun's native file watching capabilities
+  watch(pagesDirectory, { recursive: true }, (event, filename) => {
+    console.log(`Detected ${event} in ${filename}`);
+    runBuildMap();
+  });
+};
+
+const runDev = () => {
+  watchPagesDirectory();
+
+  // After setting up watch on buildMap, start the Bun process for src/index.tsx
   const scriptPath = path.join(process.cwd(), "src", "index.tsx");
   const bunProcess = spawn("bun", ["run", "--watch", scriptPath], {
     stdio: "inherit",
