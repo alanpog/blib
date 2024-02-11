@@ -2,7 +2,7 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   entryPoints: ["src/index.tsx", "src/buildMap.ts", "src/bext.ts"],
-  format: ["cjs", "esm"],
+  format: ["cjs"],
   target: "es2022",
   dts: true,
   clean: true,

@@ -1,9 +1,8 @@
 {
   "name": "@alanpog/blib",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "description": "Testing",
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup"
