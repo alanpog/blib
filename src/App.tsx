@@ -5,10 +5,14 @@ import fs from "fs";
 import withLayout from "./withLayout";
 
 async function renderPageComponent(pageName: string, isHx: boolean) {
-  const pagePath = Bun.resolveSync(
-    `./src/app/${pageName}/page.tsx`,
-    process.cwd()
-  );
+  let pagePath;
+  try {
+    pagePath = Bun.resolveSync(`./src/app/${pageName}/page.tsx`, process.cwd());
+  } catch (error) {
+    console.log("Page does not exist", error);
+    return "404 Page Not Found!";
+  }
+
   if (fs.existsSync(pagePath)) {
     const PageComponent: { default: () => JSX.Element } = await import(
       pagePath
