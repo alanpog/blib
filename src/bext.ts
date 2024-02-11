@@ -41,22 +41,22 @@ const runBuildMap = () => {
   });
 };
 
-const watchPagesDirectory = () => {
-  const pagesDirectory = path.join(process.cwd(), "src", "pages");
-  console.log(`Watching for file changes in ${pagesDirectory}...`);
+const watchAppDirectory = () => {
+  const appDirectory = path.join(process.cwd(), "src", "app");
+  console.log(`Watching for file changes in ${appDirectory}...`);
 
   // Initial run
   runBuildMap();
 
   // Set up watch using Bun's native file watching capabilities
-  watch(pagesDirectory, { recursive: true }, (event, filename) => {
+  watch(appDirectory, { recursive: true }, (event, filename) => {
     console.log(`Detected ${event} in ${filename}`);
     runBuildMap();
   });
 };
 
 const runDev = () => {
-  watchPagesDirectory();
+  watchAppDirectory();
 
   // After setting up watch on buildMap, start the Bun process for src/index.tsx
   const scriptPath = path.join(process.cwd(), "src", "index.tsx");

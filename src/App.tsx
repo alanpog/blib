@@ -6,7 +6,7 @@ import withLayout from "./withLayout";
 
 async function renderPageComponent(pageName: string, isHx: boolean) {
   const pagePath = Bun.resolveSync(
-    `./src/pages/${pageName}/page.tsx`,
+    `./src/app/${pageName}/page.tsx`,
     process.cwd()
   );
   if (fs.existsSync(pagePath)) {

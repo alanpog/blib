@@ -5,7 +5,7 @@ import path from "node:path";
 
 // Correctly determine the project root directory
 const projectRoot = process.cwd(); // This should point to the root of your project
-const pagesDirectory = path.join(projectRoot, "src", "pages");
+const appDirectory = path.join(projectRoot, "src", "app");
 const outputDir = path.join(projectRoot, ".bext"); // Output directory within project root
 const outputFile = path.join(outputDir, "ComponentMap.ts");
 
@@ -32,7 +32,7 @@ async function getFiles(
 }
 
 async function buildComponentMap() {
-  const files = await getFiles(pagesDirectory);
+  const files = await getFiles(appDirectory);
   const imports: string[] = [];
   const mappings: string[] = [];
   const componentNameCounts: Record<string, number> = {}; // Track occurrences of component names
@@ -41,8 +41,8 @@ async function buildComponentMap() {
     if (path.basename(file) !== "page.tsx") {
       return; // Skip files that are not page.tsx
     }
-    const relativePath = path.relative(pagesDirectory, file);
-    const importPath = `../src/pages/${relativePath
+    const relativePath = path.relative(appDirectory, file);
+    const importPath = `../src/app/${relativePath
       .replace(/\\/g, "/")
       .replace(/page\.tsx$/, "")}page`;
 
