@@ -57,10 +57,13 @@ const watchAppDirectory = () => {
 
 const runDev = () => {
   watchAppDirectory();
+  console.log("import.meta.dir", import.meta.dir);
+  console.log("import.meta.url", import.meta.url);
+  console.log("process.cwd()", process.cwd());
+  console.log(__dirname, "dirname");
 
-  // After setting up watch on buildMap, start the Bun process for src/index.tsx
-  const scriptPath = path.join(process.cwd(), "src", "index.tsx");
-  const bunProcess = spawn("bun", ["run", "--watch", scriptPath], {
+  const packageSrcPath = path.join(__dirname, "..", "dist", "run.js");
+  const bunProcess = spawn("bun", ["run", "--watch", packageSrcPath], {
     stdio: "inherit",
   });
 
