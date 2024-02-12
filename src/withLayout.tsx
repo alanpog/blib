@@ -1,5 +1,6 @@
 import { Html } from "@elysiajs/html";
 import Bun from "bun";
+import BaseLayout from "./BaseLayout";
 
 const withLayout = (WrappedComponent: () => JSX.Element, isHx: boolean) => {
   return () => {
@@ -13,9 +14,11 @@ const withLayout = (WrappedComponent: () => JSX.Element, isHx: boolean) => {
       const layoutPath = Bun.resolveSync("./src/layout.tsx", process.cwd());
       const Layout = require(layoutPath).default;
       return (
-        <Layout>
-          <WrappedComponent />
-        </Layout>
+        <BaseLayout>
+          <Layout>
+            <WrappedComponent />
+          </Layout>
+        </BaseLayout>
       );
     }
   };
