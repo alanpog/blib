@@ -7,7 +7,7 @@ export default defineConfig({
     "src/bext.ts",
     "src/run.ts",
   ],
-  format: ["cjs"],
+  format: ["esm"],
   target: "es2022",
   dts: true,
   clean: true,

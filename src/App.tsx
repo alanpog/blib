@@ -18,7 +18,11 @@ async function renderPageComponent(pageName: string, isHx: boolean) {
       pagePath
     );
     const WrappedPageComponent = withLayout(PageComponent.default, isHx);
-    return <WrappedPageComponent />;
+    return (
+      <>
+        <WrappedPageComponent />
+      </>
+    );
   } else {
     return "404 Page Not Found!";
   }

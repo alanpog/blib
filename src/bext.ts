@@ -64,15 +64,24 @@ const runDev = () => {
 
   const packageSrcPath = path.join(__dirname, "..", "dist", "run.js");
   const bunProcess = spawn("bun", ["run", "--watch", packageSrcPath], {
-    stdio: "inherit",
+    stdio: ["inherit", "inherit", "pipe"], // Keep stdio configuration for stderr to "pipe"
+  });
+
+  // Listen to stderr and log any data received
+  bunProcess.stderr.on("data", (data) => {
+    console.error(`Bun process stderr: ${data}`);
   });
 
   bunProcess.on("error", (err) => {
     console.error(`Failed to start bun process: ${err.message}`);
   });
 
-  bunProcess.on("exit", (code) => {
-    console.log(`Bun process exited with code ${code}`);
+  bunProcess.on("exit", (code, signal) => {
+    if (code !== null) {
+      console.log(`Bun process exited with code ${code}`);
+    } else if (signal !== null) {
+      console.error(`Bun process was terminated by signal ${signal}`);
+    }
   });
 };
 
