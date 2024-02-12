@@ -18,6 +18,7 @@ export const Link = (
       href={path}
       hx-target="#main"
       hx-push-url={path === "/" ? "/" : "true"}
+      hx-sync="a:replace"
       class={props.class}
     >
       {props.children}
